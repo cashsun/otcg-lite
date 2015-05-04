@@ -11,14 +11,52 @@ $icon-font-path: '../fonts/';
   padding: 0.2em 0;
 }
 
+.theme-editor {
+}
+
+
 body {
   padding: 0;;
   margin: 0;
 }
 
-.component-app {
-  position: fixed;
-  height: 100%;
+.component-app, .component-main {
+  position: absolute;
+  min-height: 100%;
+  height: auto;
   width: 100%;
-  background-color: #dadada;
+}
+
+.component-editor {
+  @extend .theme-editor;
+  position: absolute;
+  border-right: 1px solid gray;
+  height: 100%;
+  width: 49%;
+  overflow-y: auto;
+  .CodeMirror {
+    height: 100%;
+  }
+  .navbar {
+    margin-bottom: 0;
+  }
+}
+.component-output {
+  position: absolute;
+  border-right: 1px solid gray;
+  height: 100%;
+  width: 49%;
+  right: 0;
+  .CodeMirror {
+    height: 100%;
+  }
+}
+.component-autocompletor {
+  position: absolute;
+  height: 300px;
+  width: auto;
+  min-width: 200px;
+  z-index: 999;
+  background-color: #002D57;
+  border: 1px solid #f0f0f0;
 }

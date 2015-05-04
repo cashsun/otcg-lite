@@ -28,7 +28,13 @@ gulp.task('styles', function () {
 gulp.task('jshint', function () {
   return gulp.src(['app/scripts/**/*.js', '!app/scripts/*.build.js'])
     .pipe(reload({stream: true, once: true}))
-    .pipe($.jshint({quotmark: false, asi: true}))
+    .pipe($.jshint({
+      quotmark: false,
+      asi: true,
+      browser: true,
+      undef:false,
+      browserify: true
+    }))
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });

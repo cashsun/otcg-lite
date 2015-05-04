@@ -8,7 +8,7 @@ var DefaultRoute = Router.DefaultRoute;
 //var NotFoundRoute = Router.NotFoundRoute;
 //var Redirect = Router.Redirect;
 //var Backbone = require('backbone');
-var Index = require('./index');
+var MainPanel = require('./mainPanel');
 
 
 var App = React.createClass({
@@ -36,7 +36,7 @@ var App = React.createClass({
 
 var routes = (
   <Route handler={App}>
-    <DefaultRoute handler={Index}/>
+    <DefaultRoute handler={MainPanel}/>
 
   </Route>
 );
