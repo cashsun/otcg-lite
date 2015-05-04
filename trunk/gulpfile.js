@@ -26,14 +26,14 @@ gulp.task('styles', function () {
 });
 
 gulp.task('jshint', function () {
-  return gulp.src('app/scripts/**/*.js')
+  return gulp.src(['app/scripts/**/*.js', '!app/scripts/*.build.js'])
     .pipe(reload({stream: true, once: true}))
-    .pipe($.jshint())
+    .pipe($.jshint({quotmark: false, asi: true}))
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
-gulp.task('html', ['styles', 'browserify'], function () {
+gulp.task('html', ['styles', 'templates', 'browserify'], function () {
   var assets = $.useref.assets({searchPath: ['.tmp', 'app', '.']});
 
   return gulp.src('app/*.html')
@@ -77,7 +77,7 @@ gulp.task('extras', function () {
 
 gulp.task('clean', require('del').bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', ['styles', 'fonts'], function () {
+gulp.task('serve', ['styles', 'templates', 'browserify', 'fonts'], function () {
   browserSync({
     notify: false,
     port: 9000,
@@ -97,9 +97,11 @@ gulp.task('serve', ['styles', 'fonts'], function () {
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
-  gulp.watch('app/styles/**/*.scss', ['styles']);
+  gulp.watch('app/styles/**/*.scss', ['styles', reload]);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
+  gulp.watch('app/scripts/**/*.jsx', ['templates']);
+  gulp.watch(['app/scripts/**/*.js', '!app/scripts/*.build.js'], ['browserify', reload]);
 });
 
 // inject bower components
@@ -121,10 +123,10 @@ gulp.task('wiredep', function () {
 });
 
 gulp.task('browserify', function () {
-  return browserify({entries: ['app/scripts/main.js'], debug: true, insertGlobals: true})
+  return browserify({entries: ['./app/scripts/main.js'], debug: true, insertGlobals: true})
     .bundle()
-    .on('error', function(err){
-      console.log('error: ',err.fileName, err.stack);
+    .on('error', function (err) {
+      console.log('error: ', err.fileName, err.stack);
       this.end();
     })
     .pipe(source('main.build.js'))
@@ -137,14 +139,15 @@ gulp.task('browserify', function () {
 gulp.task('templates', function () {
   return gulp.src('app/scripts/components/*.jsx')
     .pipe($.react())
-    .on('error', function(err){
+    .on('error', function (err) {
       console.log('error: ', err.fileName, err.stack);
       this.end();
     })
-    .pipe(gulp.dest('app/scripts/components'));
+    .pipe(gulp.dest('app/scripts/components'))
+    .pipe(gulp.dest('dist/scripts/components'));
 });
 
-gulp.task('build', ['jshint', 'html', 'images', 'fonts', 'extras'], function () {
+gulp.task('build', ['html', 'jshint', 'images', 'fonts', 'extras'], function () {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

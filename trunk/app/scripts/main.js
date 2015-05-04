@@ -1,2 +1,4 @@
-/* jshint devel:true */
-console.log('\'Allo \'Allo!');
+'use strict';
+
+var App = require('./components/app');
+App.run();
