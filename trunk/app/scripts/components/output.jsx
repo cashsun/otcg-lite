@@ -14,7 +14,7 @@ var Output = React.createClass({
   componentDidMount:function(){
     var self = this;
     //var myCodeMirror =
-    window.CodeMirror.fromTextArea(React.findDOMNode(self.refs.myOutput), {
+    CodeMirror.fromTextArea(React.findDOMNode(self.refs.myOutput), {
       lineNumbers: true,
       mode: {
         name: 'javascript',
@@ -26,9 +26,10 @@ var Output = React.createClass({
   },
   render: function(){
     var self = this;
+    var description = '//Definition...\n';
     return (
       <div className={"component-output"}>
-        <textarea ref="myOutput" className={'textarea-output'} valueLink={self.linkState('myOutput')}></textarea>
+        <textarea ref="myOutput" className={'textarea-output'} defaultValue={description + self.state.myOutput}></textarea>
       </div>
     )
   }

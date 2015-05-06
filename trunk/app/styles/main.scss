@@ -53,10 +53,7 @@ body {
 }
 .component-autocompletor {
   position: absolute;
-  height: 300px;
+  height: auto;
   width: auto;
-  min-width: 200px;
   z-index: 999;
-  background-color: #002D57;
-  border: 1px solid #f0f0f0;
 }

@@ -6,26 +6,30 @@ var Editor = require('./editor');
 var Output = require('./output');
 
 var MainPanel = React.createClass({
-  getInitialState:function(){
+  getInitialState: function () {
     return {
       mapping: {
         map1: 123,
         map2: 'a',
-        map3: ['c','d','e'],
+        map3: ['c', 'd', 'e'],
         map4: {
           map5: 'b'
-        }
+        },
+        map6: [
+          {map7: [1, 2, 3]}
+        ]
+
       }
     }
   },
-  render: function(){
+  render: function () {
     return <div>
-            <Editor mapping={this.state.mapping} onRunMapping={this.onRunMapping}/>
-            <Output mapping={this.state.mapping}/>
-      </div>
+      <Editor mapping={this.state.mapping} onRunMapping={this.onRunMapping}/>
+      <Output mapping={this.state.mapping}/>
+    </div>
   },
 
-  onRunMapping: function(nextMapping){
+  onRunMapping: function (nextMapping) {
     this.setState({
       mapping: nextMapping
     });

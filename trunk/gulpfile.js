@@ -32,7 +32,7 @@ gulp.task('jshint', function () {
       quotmark: false,
       asi: true,
       browser: true,
-      undef:false,
+      predef: ['CodeMirror'],
       browserify: true
     }))
     .pipe($.jshint.reporter('jshint-stylish'))
