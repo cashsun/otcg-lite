@@ -30,6 +30,7 @@ gulp.task('jshint', function () {
     .pipe(reload({stream: true, once: true}))
     .pipe($.jshint({
       quotmark: false,
+      newcap: false,
       asi: true,
       browser: true,
       predef: ['CodeMirror'],

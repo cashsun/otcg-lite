@@ -3,8 +3,26 @@
 
 var React = require('react/addons');
 var _ = require('lodash');
-var OtcgHint = require('./otcg-hint');
+var setupAutocomplete = require('./otcg-hint');
 var evaluate = require('./customFunctions').evaluate;
+
+
+
+//get all the keys from mapping
+function getKeys(mapping) {
+  return _.chain(mapping)
+    .map(function (val, key) {
+      if (_.isObject(val)) {
+        return _.union(getKeys(val), [key])
+      } else {
+        return key;
+      }
+    })
+    .flatten()
+    .filter(_.isString)
+    .sort()
+    .value();
+}
 
 var EditorOptions = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -52,7 +70,7 @@ var EditorOptions = React.createClass({
 
   onKeyUp: function (e) {
 
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       this.onLoadType(e);
       return
     }
@@ -72,9 +90,8 @@ var Editor = React.createClass({
 
   getInitialState: function () {
     var self = this;
-
     var keys = getKeys(self.props.mapping);
-    OtcgHint(keys);
+    setupAutocomplete(keys);
 
     return {
       mappingKeys: keys,
@@ -86,8 +103,8 @@ var Editor = React.createClass({
   },
   componentWillReceiveProps: function (nextProps) {
     var keys = getKeys(nextProps.mapping);
-    OtcgHint(keys);
-    this.state.cm.getDoc().setValue('//start typing your mapping key below. Ctrl + D: delete word');
+    setupAutocomplete(keys);
+    this.state.cm.getDoc().setValue('//start typing your mapping key below. Ctrl + D: delete word, Ctrl + G: Grind');
   },
   componentDidMount: function () {
     var self = this;
@@ -95,7 +112,10 @@ var Editor = React.createClass({
       lineNumbers: true,
       mode: {name: 'javascript', json: true},
       extraKeys: {
-        "Ctrl-Space": "autocomplete",
+        'Ctrl-Space': 'autocomplete',
+        'Ctrl-G': function(cm){
+          self.onGrind();
+        },
         'Ctrl-D': function (cm) {
           var cursor = cm.getCursor();
           var token = cm.getTokenAt(cursor);
@@ -131,26 +151,9 @@ var Editor = React.createClass({
     var result = evaluate(doc.getValue().split('\n'));
     console.log('result', result);
     doc.setValue(result);
-
   }
 
 });
 
-
-//get all the keys from mapping
-function getKeys(mapping) {
-  return _.chain(mapping)
-    .map(function (val, key) {
-      if (_.isObject(val)) {
-        return _.union(getKeys(val), [key])
-      } else {
-        return key;
-      }
-    })
-    .flatten()
-    .filter(_.isString)
-    .sort()
-    .value();
-}
 
 module.exports = Editor;

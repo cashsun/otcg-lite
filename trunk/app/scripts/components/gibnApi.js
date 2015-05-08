@@ -1,6 +1,8 @@
 /**
  * Created by cashsun on 15/5/7.
  */
+'use strict';
+
 module.exports = {
   getDefinitionByType: function (type) {
     if (type === "a") {
