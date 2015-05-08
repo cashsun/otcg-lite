@@ -4,35 +4,28 @@
 var React = require('react');
 var Editor = require('./editor');
 var Output = require('./output');
+var GibnApi = require('./gibnApi');
+var _ = require('lodash');
 
 var MainPanel = React.createClass({
   getInitialState: function () {
     return {
-      mapping: {
-        map1: 123,
-        map2: 'a',
-        map3: ['c', 'd', 'e'],
-        map4: {
-          map5: 'b'
-        },
-        map6: [
-          {map7: [1, 2, 3]}
-        ]
-
-      }
+      mapping: {}
     }
+  },
+  onLoadType: function(instrumentType){
+    var definition = GibnApi.getDefinitionByType(instrumentType);
+
+    console.log('loading type', instrumentType, definition);
+    this.setState({
+      mapping: definition
+    });
   },
   render: function () {
     return <div>
-      <Editor mapping={this.state.mapping} onRunMapping={this.onRunMapping}/>
+      <Editor mapping={this.state.mapping} onLoadType={_.bind(this.onLoadType, this)}/>
       <Output mapping={this.state.mapping}/>
     </div>
-  },
-
-  onRunMapping: function (nextMapping) {
-    this.setState({
-      mapping: nextMapping
-    });
   }
 });
 module.exports = MainPanel;

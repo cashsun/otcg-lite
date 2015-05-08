@@ -5,31 +5,35 @@ var React = require('react');
 
 var Output = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
-  getInitialState:function(){
-    return  {
-      myOutput: JSON.stringify(this.props.mapping, null, 4),
-      theme: 'midnight'
+  getInitialState: function () {
+    return {
+      theme: 'midnight',
+      cm: {}
     }
   },
-  componentDidMount:function(){
-    var self = this;
-    //var myCodeMirror =
-    CodeMirror.fromTextArea(React.findDOMNode(self.refs.myOutput), {
-      lineNumbers: true,
-      mode: {
-        name: 'javascript',
-        json: true
-      },
-      theme: self.state.theme,
-      readOnly: true
-    });
+  componentWillReceiveProps: function (nextProps) {
+    this.state.cm.getDoc().setValue(JSON.stringify(nextProps.mapping, null, 2));
   },
-  render: function(){
+  componentDidMount: function () {
     var self = this;
-    var description = '//Definition...\n';
+    var myCodeMirror =
+      CodeMirror.fromTextArea(React.findDOMNode(self.refs.myOutput), {
+        lineNumbers: true,
+        mode: {
+          name: 'javascript',
+          json: true
+        },
+        theme: self.state.theme,
+        readOnly: true
+      });
+    self.setState({
+      cm: myCodeMirror
+    })
+  },
+  render: function () {
     return (
       <div className={"component-output"}>
-        <textarea ref="myOutput" className={'textarea-output'} defaultValue={description + self.state.myOutput}></textarea>
+        <textarea ref="myOutput" className={'textarea-output'} defaultValue="Please load an instrument type first..." ></textarea>
       </div>
     )
   }

@@ -4,20 +4,26 @@
 'use strict';
 
 var _ = require('lodash');
+var customFunctions = require('./customFunctions').customFunctions;
 
-module.exports = function (keyWords) {
+module.exports = function (customKeyWords) {
   var Pos = CodeMirror.Pos;
+  var allKeywords = _.union(_.keys(customFunctions), customKeyWords);
 
   function getCompletions(token) {
-    if(_.isEmpty(token.string)){
+    if (_.isEmpty(token.string)) {
       return [];
     }
 
-    return _.chain(keyWords).filter(function (keyWord) {
+    return _.chain(allKeywords).filter(function (keyWord) {
       return _.contains(keyWord, token.string);
     }).map(function (hint) {
+      if (customFunctions[hint]) {
+        return customFunctions[hint]
+      }
+
       return {
-        text: hint + ' = ',
+        text: '"' + hint + '"' + ': ',
         displayText: hint
       }
     }).value();
