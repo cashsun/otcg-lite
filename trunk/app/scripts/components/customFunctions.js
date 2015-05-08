@@ -20,8 +20,8 @@ var customFunctions = {
       //caveat: same function only allowed once each line?...
       var match = _.first(line.match(regex.generateDate));
       if(match){
-        var params = getParams(match.replace(/generateDate\((\s)*"?/, ''));
-        console.log(params);
+        var params = getParams(match, regex.generateDate);
+        console.log('fn: ', 'generateDate', params);
         var result = moment(params[0], DATE_FORMAT).add(params[1], params[2]).format(DATE_FORMAT);
         return line.replace(regex.generateDate, '"'+result+'"');
       }
@@ -31,10 +31,9 @@ var customFunctions = {
   }
 };
 
-function getParams(paramString){
-  return paramString
-    .replace(/"?(\s)*\)/, '')
-    .replace(/"?(\s)*"?,"?(\s)*"?/g, SPLITTER).split(SPLITTER)
+function getParams(matchToken, fnRegex){
+  var str = fnRegex.toString().split('.*')[0].replace(/\//,'').replace(/\\/,'');
+  return matchToken.replace(str, '').replace('"','').replace(/"?\)/,'').replace(/"?(\s)*"?,"?(\s)*"?/g, SPLITTER).split(SPLITTER)
 }
 
 
