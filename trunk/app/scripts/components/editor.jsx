@@ -7,7 +7,6 @@ var setupAutocomplete = require('./otcg-hint');
 var evaluate = require('./customFunctions').evaluate;
 
 
-
 //get all the keys from mapping
 function getKeys(mapping) {
   return _.chain(mapping)
@@ -113,13 +112,13 @@ var Editor = React.createClass({
       mode: {name: 'javascript', json: true},
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
-        'Ctrl-G': function(cm){
+        'Ctrl-G': function (cm) {
           self.onGrind();
         },
         'Ctrl-D': function (cm) {
           var cursor = cm.getCursor();
           var token = cm.getTokenAt(cursor);
-          cm.getDoc().replaceRange('', CodeMirror.Pos(cursor.line, token.start),CodeMirror.Pos(cursor.line, token.end));
+          cm.getDoc().replaceRange('', CodeMirror.Pos(cursor.line, token.start), CodeMirror.Pos(cursor.line, token.end));
         }
       },
       tabSize: 2,
@@ -148,9 +147,10 @@ var Editor = React.createClass({
 
   onGrind: function () {
     var doc = this.state.cm.getDoc();
-    var result = evaluate(doc.getValue().split('\n'));
-    console.log('result', result);
-    doc.setValue(result);
+    evaluate(doc.getValue().split('\n')).then(function (result) {
+      console.log('result', result);
+      doc.setValue(result);
+    });
   }
 
 });

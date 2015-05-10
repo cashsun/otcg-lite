@@ -161,3 +161,8 @@ gulp.task('build', ['html', 'jshint', 'images', 'fonts', 'extras'], function () 
 gulp.task('default', ['clean'], function () {
   gulp.start('build');
 });
+
+gulp.task('test-client', ['templates'], function(){
+  return gulp.src('test/spec/*', {read: false})
+    .pipe($.mocha({reporter: 'nyan'}));
+});

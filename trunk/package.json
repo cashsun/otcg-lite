@@ -27,13 +27,17 @@
     "wiredep": "^2.0.0",
     "vinyl-source-stream": "~1.1.0",
     "browserify": "~10.0.0",
-    "gulp-react": "~3.0.1"
+    "gulp-react": "~3.0.1",
+    "gulp-mocha": "~2.0.1",
+    "chai": "~2.3.0",
+    "chai-as-promised": "~5.0.0"
   },
   "dependencies": {
     "react": "~0.13.2",
     "react-router": "~0.13.3",
     "backbone": "~1.1.2",
     "lodash": "~3.8.0",
-    "moment": "~2.10.2"
+    "moment": "~2.10.2",
+    "q": "~1.4.0"
   }
 }
